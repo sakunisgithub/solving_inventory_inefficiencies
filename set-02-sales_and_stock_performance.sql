@@ -1,5 +1,7 @@
 -- sales and stock performance
 
+USE inventory;
+
 -- Which product categories have the highest total sales?
 
 select p.category as category , sum(t.units_sold) as total_sales
@@ -50,3 +52,9 @@ where t.units_sold < (select avg(t.units_sold) from transactions t)
            and
           t.inventory_level > (select avg(t.inventory_level) from transactions t)
 group by p.product_id;
+
+
+SELECT price_comparison, AVG(units_sold)
+FROM (SELECT (CASE WHEN price <= competitor_price THEN 'less_or_equal' ELSE 'greater' END) AS price_comparison, units_sold
+		FROM transactions) as comparison
+GROUP BY price_comparison;
